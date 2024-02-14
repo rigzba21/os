@@ -1,0 +1,10 @@
+package:
+  name: micromamba
+  version: 1.5.6
+  epoch: 0
+  description: "micromamba is a fully statically-linked, self-contained, executable for working with conda environments."
+  copyright:
+    - license: BSD-3-Clause
+---
+TODO/WIP
+---
