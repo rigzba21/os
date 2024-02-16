@@ -5,6 +5,31 @@ package:
   description: "micromamba is a fully statically-linked, self-contained, executable for working with conda environments."
   copyright:
     - license: BSD-3-Clause
----
-TODO/WIP
----
+environment:
+  contents:
+    repositories:
+      - https://packages.wolfi.dev/os
+    keyring:
+      - https://packages.wolfi.dev/os/wolfi-signing.rsa.pub
+    packages:
+      - bash
+      - busybox
+      - build-base
+      - cmake
+      - python-3.12
+      - meson
+pipeline:
+  - uses: fetch
+    with:
+      uri: https://github.com/mamba-org/mamba/archive/refs/tags/micromamba-${{package.version}}.tar.gz
+      expected-sha256: aabff23746d634255681d4bb249740214e8405c12caee9682e0ee0c22e423e4a
+  - runs: |
+      meson wrap install fmt
+      cmake -B build/ \
+        ${CMAKE_ARGS} \
+        -D CMAKE_BUILD_TYPE="Release" \
+        -D BUILD_LIBMAMBA=ON \
+        -D BUILD_STATIC=ON \
+        -D BUILD_MICROMAMBA=ON
+      cmake --build build/ --parallel
+      strip "build/micromamba/micromamba"
